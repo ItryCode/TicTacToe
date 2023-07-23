@@ -1,3 +1,15 @@
+const displayController=(()=>{
+    const renderMessage=(message)=>{
+        document.querySelector("#message").innerHTML=message;
+    }
+
+    return{
+        renderMessage
+    }
+})();
+
+
+
 const GameBoard=(()=>{
     let gameboard=["","","","","","","","",""]
 
@@ -51,6 +63,7 @@ const Game=(()=>{
 
     const start=()=>{
         restart()
+        
         players=[
             createPlayer(document.querySelector("#player1").value,"X"),
             createPlayer(document.querySelector("#player2").value,"O")
@@ -67,7 +80,9 @@ const Game=(()=>{
     }
 
     const handleClick=(event)=>{
-        
+        if(gameOver){
+            return;
+        }
         let index=parseInt(event.target.id.split('-')[1]);
         if(GameBoard.getGameboard()[index]!=="")
         {
@@ -77,13 +92,13 @@ const Game=(()=>{
 
         if(checkForWin(GameBoard.getGameboard(),players[currentPlayerIndex].mark)){
             gameOver=true;
-            alert(`${players[currentPlayerIndex].name} has Won!`)
-            restart()
+            displayController.renderMessage(`${players[currentPlayerIndex].name} has Won!`)
+            
         }
         else if(checkForTie(GameBoard.getGameboard())){
             gameOver=true;
-            alert(`It's a Tie!!`)
-            restart()
+            displayController.renderMessage(`It's a Tie!!`)
+            
         }
         
         
@@ -98,6 +113,7 @@ const Game=(()=>{
             GameBoard.update(i,"")
         }
         GameBoard.render();
+        document.querySelector("#message").innerHTML="";
     }
 
     return{
