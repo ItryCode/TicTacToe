@@ -81,11 +81,25 @@ const Game=(()=>{
 
     }
 
+    const restart=()=>{
+        for(let i=0;i<9;i++){
+            GameBoard.update(i,"")
+        }
+        GameBoard.render();
+    }
+
     return{
         start,
-        handleClick
+        handleClick,
+        restart
     }
 })();
+
+
+const restartButton=document.querySelector("#restart-button");
+restartButton.addEventListener("click",()=>{
+    Game.restart();
+})
 
 const startButton=document.querySelector("#start-button")
 startButton.addEventListener("click",()=>{
