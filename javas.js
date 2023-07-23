@@ -50,6 +50,7 @@ const Game=(()=>{
     let gameOver
 
     const start=()=>{
+        restart()
         players=[
             createPlayer(document.querySelector("#player1").value,"X"),
             createPlayer(document.querySelector("#player2").value,"O")
@@ -66,6 +67,7 @@ const Game=(()=>{
     }
 
     const handleClick=(event)=>{
+        
         let index=parseInt(event.target.id.split('-')[1]);
         if(GameBoard.getGameboard()[index]!=="")
         {
@@ -73,6 +75,16 @@ const Game=(()=>{
         }
         GameBoard.update(index,players[currentPlayerIndex].mark)
 
+        if(checkForWin(GameBoard.getGameboard(),players[currentPlayerIndex].mark)){
+            gameOver=true;
+            alert(`${players[currentPlayerIndex].name} has Won!`)
+            restart()
+        }
+        else if(checkForTie(GameBoard.getGameboard())){
+            gameOver=true;
+            alert(`It's a Tie!!`)
+            restart()
+        }
         
         
         currentPlayerIndex=currentPlayerIndex===0?1:0;
@@ -95,6 +107,34 @@ const Game=(()=>{
     }
 })();
 
+
+function checkForWin(board){
+    const winningCombinations=[
+        [0,1,2],
+        [3,4,5],
+        [6,7,8],
+        [0,3,6],
+        [1,4,7],
+        [2,5,8],
+        [0,4,8],
+        [2,4,6]
+
+    ]
+
+    for(let i=0;i<winningCombinations.length;i++){
+        const[a,b,c]=winningCombinations[i];
+        if(board[a] && board[a]===board[b] && board[b]===board[c] && board[a]===board[c]){
+            return true;
+        }
+    }
+    return false;
+}
+
+function checkForTie(board){
+    return board.every(cell=>cell!=="")
+
+
+}
 
 const restartButton=document.querySelector("#restart-button");
 restartButton.addEventListener("click",()=>{
