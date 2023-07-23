@@ -1,5 +1,6 @@
 const GameBoard=(()=>{
     let gameboard=["","","","","","","","",""]
+
     const render=()=>{
         let boardHTML="";
         gameboard.forEach((square,index)=>{
@@ -7,16 +8,31 @@ const GameBoard=(()=>{
         })
 
         document.querySelector("#gameboard").innerHTML=boardHTML;
-
         const squares=document.querySelectorAll(".square")
         squares.forEach((square)=>{
             square.addEventListener('click',Game.handleClick);
         })
-    }  
+
+        
+       
+    }
+
+    const update=(index,value)=>{
+        gameboard[index]=value;
+        render();
+    };
+
+    const getGameboard=()=>{
+        return gameboard;
+    }
+
+
     
 
     return{
         render,
+        update,
+        getGameboard
     }
 })();
 
@@ -41,11 +57,26 @@ const Game=(()=>{
         currentPlayerIndex=0;
         gameOver=false;
         GameBoard.render();
+        const squares=document.querySelectorAll(".square")
+        squares.forEach((square)=>{
+            square.addEventListener('click',handleClick);
+        })
+
+        
     }
 
     const handleClick=(event)=>{
         let index=parseInt(event.target.id.split('-')[1]);
-        console.log(index)
+        if(GameBoard.getGameboard()[index]!=="")
+        {
+            return
+        }
+        GameBoard.update(index,players[currentPlayerIndex].mark)
+
+        
+        
+        currentPlayerIndex=currentPlayerIndex===0?1:0;
+
 
 
     }
